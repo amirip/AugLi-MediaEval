@@ -1,6 +1,8 @@
 # AugLi-MediaEval
 Code for Team AugLi's submission for the 2019 MediaEval Theme Recognition challenge.
 
+> S. Amiriparian, M. Gerczuk, E. Coutinho, A. Baird, S. Ottl, M. Milling, and B. Schuller. Emotion and Themes Recognition in Music Utilising Convolutional and Recurrent Neural Networks. In MediaEval 2019.
+
 ## Dependencies
 - python >= 3.6
 - tensorflow
@@ -45,20 +47,20 @@ The other part of our fusion system makes use of the [Deep Spectrum](https://git
 ### Extracting the Features
 Two different feature sets must be extracted with Deep Spectrum. For a window size of 5s:
 ```bash
-deepspectrum features MEDIAEVAL19/audio -t 5 5 -s 0 -e 30 -en VGG16 -el fc2 -cm magma -m mel -nl -lf labels/autotagging_moodtheme-train.csv -o MEDIAEVAL19/features/DeepSpectrum/5s/train.csv
+deepspectrum features MEDIAEVAL19/audio -t 5 5 -s 0 -e 29 -en VGG16 -el fc2 -fs mel -cm magma -m mel -nl -lf labels/autotagging_moodtheme-train.csv -o MEDIAEVAL19/features/DeepSpectrum/5s/train.csv
 
-deepspectrum features MEDIAEVAL19/audio -t 5 5 -s 0 -e 30 -en VGG16 -el fc2 -cm magma -m mel -nl -lf labels/autotagging_moodtheme-validation.csv -o MEDIAEVAL19/features/DeepSpectrum/5s/validation.csv
+deepspectrum features MEDIAEVAL19/audio -t 5 5 -s 0 -e 29 -en VGG16 -el fc2 -fs mel -cm magma -m mel -nl -lf labels/autotagging_moodtheme-validation.csv -o MEDIAEVAL19/features/DeepSpectrum/5s/validation.csv
 
-deepspectrum features MEDIAEVAL19/audio -t 5 5 -s 0 -e 30 -en VGG16 -el fc2 -cm magma -m mel -nl -lf labels/autotagging_moodtheme-test.csv -o MEDIAEVAL19/features/DeepSpectrum/5s/test.csv
+deepspectrum features MEDIAEVAL19/audio -t 5 5 -s 0 -e 29 -en VGG16 -el fc2 -fs mel -cm magma -m mel -nl -lf labels/autotagging_moodtheme-test.csv -o MEDIAEVAL19/features/DeepSpectrum/5s/test.csv
 ```
 
 And for 1s windows:
 ```bash
-deepspectrum features MEDIAEVAL19/audio -t 1 1 -s 0 -e 30 -en VGG16 -el fc2 -cm magma -m mel -nl -lf labels/autotagging_moodtheme-train.csv -o MEDIAEVAL19/features/DeepSpectrum/1s/train.csv
+deepspectrum features MEDIAEVAL19/audio -t 1 1 -s 0 -e 29 -en VGG16 -el fc2 -fs mel  -cm magma -m mel -nl -lf labels/autotagging_moodtheme-train.csv -o MEDIAEVAL19/features/DeepSpectrum/1s/train.csv
 
-deepspectrum features MEDIAEVAL19/audio -t 1 1 -s 0 -e 30 -en VGG16 -el fc2 -cm magma -m mel -nl -lf labels/autotagging_moodtheme-validation.csv -o MEDIAEVAL19/features/DeepSpectrum/1s/validation.csv
+deepspectrum features MEDIAEVAL19/audio -t 1 1 -s 0 -e 29 -en VGG16 -el fc2 -fs mel -cm magma -m mel -nl -lf labels/autotagging_moodtheme-validation.csv -o MEDIAEVAL19/features/DeepSpectrum/1s/validation.csv
 
-deepspectrum features MEDIAEVAL19/audio -t 1 1 -s 0 -e 30 -en VGG16 -el fc2 -cm magma -m mel -nl -lf labels/autotagging_moodtheme-test.csv -o MEDIAEVAL19/features/DeepSpectrum/1s/test.csv
+deepspectrum features MEDIAEVAL19/audio -t 1 1 -s 0 -e 29 -en VGG16 -el fc2 -fs mel -cm magma -m mel -nl -lf labels/autotagging_moodtheme-test.csv -o MEDIAEVAL19/features/DeepSpectrum/1s/test.csv
 ```
 
 Finally, transform them to `.npz` files:
@@ -93,3 +95,14 @@ python fusion.py -mep MEDIA-EVAL19/ -o fusion-results
 ```
 The results are printed to the commandline and also stored in the folder `fusion-results`.
 
+## References
+
+* Gemmeke, J. et. al.,
+  [AudioSet: An ontology and human-labelled dataset for audio events](https://research.google.com/pubs/pub45857.html),
+  ICASSP 2017
+
+* Hershey, S. et. al.,
+  [CNN Architectures for Large-Scale Audio Classification](https://research.google.com/pubs/pub45611.html),
+  ICASSP 2017
+
+* [keras implementation of VGGish](https://github.com/DTaoo/VGGish)

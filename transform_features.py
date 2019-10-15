@@ -38,7 +38,6 @@ def transform_feature_csv(feature_csv, label_tsv):
     labels = np.array(labels)
     features = np.array(features, dtype=np.float32)
     tags = np.array(label_binarizer.classes_, dtype=str)
-    print(names.shape, names.dtype, labels.shape, labels.dtype, features.shape, features.dtype, tags.shape)
     np.savez_compressed(f'{splitext(feature_csv)[0]}.npz', names=names, y=labels, X=features, tags=tags)
     
 if __name__=='__main__':
