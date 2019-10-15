@@ -8,8 +8,8 @@ from os.path import join
 MEDIA_EVAL_PATH = './MEDIA-EVAL19'
 
 
-def fuse():
-    predictions = np.array(list(map(np.load, Path('./fusion').glob('**/predictions.npy'))))
+def fuse(glob):
+    predictions = np.array(list(map(np.load, glob)))
     print(predictions.shape)
     mean_predictions = np.mean(predictions, axis=0)
     return mean_predictions
@@ -88,17 +88,63 @@ def evaluate(groundtruth_file,
               help='Path to media eval dataset. Should contain the "mtg-jamendo-dataset" folder.',
               type=click.Path(file_okay=False),
               default='MEDIA-EVAL19')
-def main(media_eval_path):
+@click.option(
+    '-o',
+    '--output-directory',
+    type=click.Path(writable=True, readable=True),
+    help='Directory for storing fused predictions, decisions, thresholds and results.',
+    default=None,
+)
+def main(media_eval_path,
+output_dir=None):
     groundtruth_file = join(media_eval_path, 'mtg-jamendo-dataset', 'results', 'mediaeval2019', 'groundtruth.npy')
     tag_file = join(media_eval_path, 'mtg-jamendo-dataset', 'data', 'tags', 'moodtheme_split.txt')
     tags = pd.read_csv(tag_file, delimiter='\t', header=None)[0].to_list()
-    predictions = fuse()
-    #np.save('all.npy', predictions)
+    
+    # all
+    glob = Path('./fusion').glob('**/predictions.npy')
+    predictions = fuse(glob)
     thresholds, decisions = calculate_decisions(groundtruth=np.load(groundtruth_file), predictions=predictions, tags=tags)
     evaluate(groundtruth_file=groundtruth_file,
              predictions=predictions,
              decisions=decisions,
-             output_file='evaluation-on-test-DS_5s.tsv')
+             output_file=None)
+
+    # crnn
+    glob = Path('./fusion').glob('crnn/**/predictions.npy')
+    predictions = fuse(glob)
+    thresholds, decisions = calculate_decisions(groundtruth=np.load(groundtruth_file), predictions=predictions, tags=tags)
+    evaluate(groundtruth_file=groundtruth_file,
+             predictions=predictions,
+             decisions=decisions,
+             output_file=None)
+
+    # DS
+    glob = Path('./fusion').glob('DeepSpectrum/**/predictions.npy')
+    predictions = fuse(glob)
+    thresholds, decisions = calculate_decisions(groundtruth=np.load(groundtruth_file), predictions=predictions, tags=tags)
+    evaluate(groundtruth_file=groundtruth_file,
+             predictions=predictions,
+             decisions=decisions,
+             output_file=None)
+
+    # DS
+    glob = Path('./fusion').glob('DeepSpectrum/1s/**/predictions.npy')
+    predictions = fuse(glob)
+    thresholds, decisions = calculate_decisions(groundtruth=np.load(groundtruth_file), predictions=predictions, tags=tags)
+    evaluate(groundtruth_file=groundtruth_file,
+             predictions=predictions,
+             decisions=decisions,
+             output_file=None)
+
+    # DS
+    glob = Path('./fusion').glob('DeepSpectrum/5s/**/predictions.npy')
+    predictions = fuse(glob)
+    thresholds, decisions = calculate_decisions(groundtruth=np.load(groundtruth_file), predictions=predictions, tags=tags)
+    evaluate(groundtruth_file=groundtruth_file,
+             predictions=predictions,
+             decisions=decisions,
+             output_file=None)
 
 if __name__=='__main__':
     main()
