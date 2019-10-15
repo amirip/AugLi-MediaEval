@@ -403,13 +403,6 @@ def evaluate(groundtruth_file,
     help='Number of recurrent layers.',
     default=2,
 )
-@click.option(
-    '-ng',
-    '--n-gpus',
-    type=int,
-    help='Number of gpus.',
-    default=1,
-)
 @click.option('-o',
               '--optimizer',
               type=click.Choice(OPTIMIZERS.keys()),
@@ -478,8 +471,7 @@ def train(
         fine_tune_portion=0.8,
         pitch_shift=None,
         time_stretch=None,
-        random_noise=None,
-        n_gpus=1):
+        random_noise=None):
     now = datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
     fine_tune_epochs = round(fine_tune_portion * epochs)
     experiment_base_path = abspath(experiment_base_path)
@@ -510,19 +502,18 @@ def train(
     print(x.shape)
 
     opt = OPTIMIZERS[optimizer](lr=learning_rate)
-    with tf.device('/cpu:0'):
-        m, vggish = build_model_vggish(classes=classes,
-                            shape=(None, None, *x.shape[2:]),
-                            dropout_final=dropout_final,
-                            sr=train_gen.sr,
-                            rnn_type=rnn_type,
-                            rnn_units=rnn_units,
-                            rnn_layers=rnn_layers,
-                            rnn_dropout=rnn_dropout,
-                            random_noise=random_noise,
-                            weights='soundnet')
+    
+    m, vggish = build_model_vggish(classes=classes,
+                        shape=(None, None, *x.shape[2:]),
+                        dropout_final=dropout_final,
+                        sr=train_gen.sr,
+                        rnn_type=rnn_type,
+                        rnn_units=rnn_units,
+                        rnn_layers=rnn_layers,
+                        rnn_dropout=rnn_dropout,
+                        random_noise=random_noise,
+                        weights='soundnet')
       
-    m = multi_gpu_model(m, gpus=n_gpus)
     m.compile(loss='binary_crossentropy',
               metrics=[keras.metrics.categorical_accuracy],
               optimizer=opt)
