@@ -595,7 +595,7 @@ def train(
     print(scores.shape, predicted_tags.shape)
     np.save(join(experiment_base_path, 'predictions.npy'), scores)
     np.save(join(experiment_base_path, 'decisions.npy'), predicted_tags)
-    evaluate(groundtruth_file=join(media_eval_path, 'mtg-jamendo-dataset', 'data',
+    evaluate(groundtruth_file=join(media_eval_path, 'mtg-jamendo-dataset', 'results',
                               'mediaeval2019', 'groundtruth.npy'),
              prediction_file=join(experiment_base_path, 'predictions.npy'),
              decision_file=join(experiment_base_path, 'decisions.npy'),
