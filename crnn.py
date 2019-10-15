@@ -475,11 +475,11 @@ def train(
     now = datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
     fine_tune_epochs = round(fine_tune_portion * epochs)
     experiment_base_path = abspath(experiment_base_path)
-    experiment_base_path = join(
+    """ experiment_base_path = join(
         experiment_base_path,
         f'noise-{random_noise}-pitchShift-{pitch_shift}-timeStretch-{time_stretch}-spectrogramWindow-{str(window)+"s"}-{rnn_type}-{rnn_layers}x{rnn_units}-{optimizer}-lr-{learning_rate}-bs-{batch_size}-epochs-{epochs}-dropoutFinal-{dropout_final:.1f}-dropoutRNN-{rnn_dropout:.1f}'
     )
-    experiment_base_path = join(experiment_base_path, now)
+    experiment_base_path = join(experiment_base_path, now) """
     makedirs(experiment_base_path, exist_ok=True)
 
     train_gen = AudioDataGenerator(csv_file=train_csv,
@@ -559,7 +559,7 @@ def train(
                 optimizer=opt)
         m.summary()
         m.fit_generator(train_gen,
-                        initial_epoch=epochs - fine_tune_epochs + 1,
+                        initial_epoch=epochs - fine_tune_epochs,
                         epochs=epochs,
                         validation_data=eval_gen,
                         max_queue_size=2 * n_workers,

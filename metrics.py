@@ -47,9 +47,8 @@ class ClassificationMetricCallback(tf.keras.callbacks.Callback):
         self.validation_data = validation_data
         self.multi_label = multi_label
         self._binary_cutoffs = []
-
-    def on_train_begin(self, logs={}):
         self._data = []
+        
 
     def on_epoch_end(self, batch, logs={}):
         if self.validation_generator is None:
