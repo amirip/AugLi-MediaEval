@@ -434,14 +434,14 @@ def evaluate(groundtruth_file,
     type=click.FloatRange(0, 1),
     help=
     'Add random white noise with maximum power.',
-    default=None,
+    default=0.1,
 )
 @click.option(
     '-w',
     '--window',
     type=int,
     help='Window size.',
-    default=None,
+    default=20,
 )
 @click.option(
     '-ftp',
@@ -463,7 +463,7 @@ def train(
         n_workers=16,
         batch_size=32,
         rnn_type='gru',
-        window=None,
+        window=20,
         rnn_units=256,
         rnn_layers=2,
         dropout_final=0.3,
@@ -471,7 +471,7 @@ def train(
         fine_tune_portion=0.8,
         pitch_shift=None,
         time_stretch=None,
-        random_noise=None):
+        random_noise=0.1):
     now = datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
     fine_tune_epochs = round(fine_tune_portion * epochs)
     experiment_base_path = abspath(experiment_base_path)
