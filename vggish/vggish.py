@@ -17,7 +17,7 @@ from keras.layers import Flatten, Dense, Input, Conv2D, MaxPooling2D, GlobalAver
 from keras.engine.topology import get_source_inputs
 from keras import backend as K
 
-import vggish_params as params
+import vggish.vggish_params as params
 
 # weight path
 import os

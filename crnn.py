@@ -414,7 +414,7 @@ def evaluate(groundtruth_file,
               '--optimizer',
               type=click.Choice(OPTIMIZERS.keys()),
               help='Optimizer used for training.',
-              default='adam')
+              default='rmsprop')
 @click.option('-rt',
               '--rnn-type',
               type=click.Choice(('bilstm', 'lstm', 'gru')),
@@ -485,7 +485,7 @@ def train(
     experiment_base_path = abspath(experiment_base_path)
     experiment_base_path = join(
         experiment_base_path,
-        f'noise-{random_noise}-pitchShift-{pitch_shift}-timeStretch-{time_stretch}-spectrogramWindow-{str(window)+"s"}-{rnn_type}-{rnn_layers}x{rnn_units}-{loss}-{optimizer}-lr-{learning_rate}-bs-{batch_size}-epochs-{epochs}-dropoutFinal-{dropout_final:.1f}-dropoutCNN-{cnn_dropout:.1f}-dropoutRNN-{rnn_dropout:.1f}'
+        f'noise-{random_noise}-pitchShift-{pitch_shift}-timeStretch-{time_stretch}-spectrogramWindow-{str(window)+"s"}-{rnn_type}-{rnn_layers}x{rnn_units}-{optimizer}-lr-{learning_rate}-bs-{batch_size}-epochs-{epochs}-dropoutFinal-{dropout_final:.1f}-dropoutCNN-{cnn_dropout:.1f}-dropoutRNN-{rnn_dropout:.1f}'
     )
     experiment_base_path = join(experiment_base_path, now)
     makedirs(experiment_base_path, exist_ok=True)
