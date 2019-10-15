@@ -12,7 +12,7 @@ from sklearn.svm import LinearSVC, LinearSVR
 from sklearn.ensemble import AdaBoostRegressor
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.multiclass import OneVsRestClassifier
-from metrics import SCIKIT_CLASSIFICATION_SCORERS_EXTENDED, ROC_AUC, ClassificationMetricCallback, ClassificationMetric, KERAS_METRIC_MODES, KERAS_METRIC_QUANTITIES
+from metrics import ROC_AUC, ClassificationMetricCallback, ClassificationMetric, KERAS_METRIC_MODES, KERAS_METRIC_QUANTITIES
 from sklearn.model_selection import PredefinedSplit, GridSearchCV, StratifiedKFold, KFold, cross_val_predict
 from sklearn.pipeline import Pipeline
 from sklearn import metrics
@@ -166,7 +166,7 @@ def evaluate(groundtruth_file,
     '--epochs',
     type=int,
     help='Define number of training epochs.',
-    default=50,
+    default=1000,
 )
 @click.option(
     '-lr',
@@ -179,14 +179,14 @@ def evaluate(groundtruth_file,
     '-dornn',
     '--rnn-dropout',
     type=click.FloatRange(0, 1),
-    default=0.3,
+    default=0.4,
     help='RNN Dropout.',
 )
 @click.option(
     '-dof',
     '--dropout-final',
     type=click.FloatRange(0, 1),
-    default=0.3,
+    default=0.4,
     help='Final Denselayer dropout.',
 )
 @click.option(
@@ -201,7 +201,7 @@ def evaluate(groundtruth_file,
     '--rnn-units',
     type=int,
     help='Number of units on recurrent layers.',
-    default=256,
+    default=1024,
 )
 @click.option(
     '-rl',
@@ -214,7 +214,7 @@ def evaluate(groundtruth_file,
               '--optimizer',
               type=click.Choice(OPTIMIZERS.keys()),
               help='Optimizer used for training.',
-              default='adam')
+              default='rmsprop')
 @click.option('-rt',
               '--rnn-type',
               type=click.Choice(('bilstm', 'lstm', 'gru')),
@@ -224,15 +224,15 @@ def train(train_npz=None,
           val_npz=None,
           test_npz=None,
           experiment_base_path=None,
-          epochs=20,
-          optimizer='adam',
+          epochs=1000,
+          optimizer='rmsprop',
           learning_rate=0.001,
           batch_size=32,
           rnn_type='gru',
-          rnn_units=256,
+          rnn_units=1024,
           rnn_layers=2,
-          dropout_final=0.3,
-          rnn_dropout=0.3):
+          dropout_final=0.4,
+          rnn_dropout=0.4):
     loaded_train = np.load(train_npz)
     X_train = loaded_train['X']
     y_train = loaded_train['y']
@@ -242,13 +242,7 @@ def train(train_npz=None,
     tags = loaded_train['tags']
     print(f'Classes: {tags}')
     print(X_train.shape)
-    now = datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
     experiment_base_path = abspath(experiment_base_path)
-    experiment_base_path = join(
-        experiment_base_path,
-        f'{rnn_type}-{rnn_layers}x{rnn_units}-{optimizer}-lr-{learning_rate}-bs-{batch_size}-epochs-{epochs}-dropoutFinal-{dropout_final:.1f}-dropoutRNN-{rnn_dropout:.1f}'
-    )
-    experiment_base_path = join(experiment_base_path, now)
     makedirs(experiment_base_path, exist_ok=True)
 
     m = build_model(classes=tags,
@@ -307,7 +301,7 @@ def train(train_npz=None,
     np.save(join(experiment_base_path, 'predictions.npy'), scores)
     np.save(join(experiment_base_path, 'decisions.npy'), predicted_tags)
     evaluate(groundtruth_file=join(MEDIA_EVAL_PATH, 'mtg-jamendo-dataset',
-                                   'data', 'mediaeval2019', 'groundtruth.npy'),
+                                   'results', 'mediaeval2019', 'groundtruth.npy'),
              prediction_file=join(experiment_base_path, 'predictions.npy'),
              decision_file=join(experiment_base_path, 'decisions.npy'),
              output_file=join(experiment_base_path, 'evaluation-on-test.tsv'))

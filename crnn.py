@@ -472,14 +472,8 @@ def train(
         pitch_shift=None,
         time_stretch=None,
         random_noise=0.1):
-    now = datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
     fine_tune_epochs = round(fine_tune_portion * epochs)
     experiment_base_path = abspath(experiment_base_path)
-    """ experiment_base_path = join(
-        experiment_base_path,
-        f'noise-{random_noise}-pitchShift-{pitch_shift}-timeStretch-{time_stretch}-spectrogramWindow-{str(window)+"s"}-{rnn_type}-{rnn_layers}x{rnn_units}-{optimizer}-lr-{learning_rate}-bs-{batch_size}-epochs-{epochs}-dropoutFinal-{dropout_final:.1f}-dropoutRNN-{rnn_dropout:.1f}'
-    )
-    experiment_base_path = join(experiment_base_path, now) """
     makedirs(experiment_base_path, exist_ok=True)
 
     train_gen = AudioDataGenerator(csv_file=train_csv,
@@ -549,7 +543,7 @@ def train(
             'Finished training RNN classifier head. Proceeding to finetune VGGish feature layers. Loading best weights...'
         )
         m.load_weights(join(experiment_base_path, 'checkpoints', 'weights.h5'))
-        opt = keras.optimizers.SGD(lr=learning_rate/10)
+        opt = OPTIMIZERS[optimizer](lr=learning_rate/10)
         for layer in m.layers:
             m.trainable = True
         for layer in vggish.layers:

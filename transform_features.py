@@ -6,8 +6,8 @@ from sklearn.preprocessing import MultiLabelBinarizer
 from os.path import join, splitext
 from tqdm import tqdm
 
-FEATURE_PATH='./MEDIA-EVAL19/features/DeepSpectrum/vgg16/fc2/mel/magma/1-1/'
-LABEL_PATH='./MEDIA-EVAL19/mtg-jamendo-dataset/data/splits/split-0/'
+FEATURE_PATH='MEDIA-EVAL19/features/DeepSpectrum/5s/'
+LABEL_PATH='MEDIA-EVAL19/mtg-jamendo-dataset/data/splits/split-0/'
 
 def transform_feature_csv(feature_csv, label_tsv):
     filenames = []
