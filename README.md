@@ -4,7 +4,7 @@ Code for Team AugLi's submission for the 2019 MediaEval Theme Recognition challe
 > S. Amiriparian, M. Gerczuk, E. Coutinho, A. Baird, S. Ottl, M. Milling, and B. Schuller. Emotion and Themes Recognition in Music Utilising Convolutional and Recurrent Neural Networks. In MediaEval 2019.
 
 ## Dependencies
-- python >= 3.6
+- python >= 3.7
 - tensorflow
 - keras
 - kapre
