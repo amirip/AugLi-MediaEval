@@ -197,7 +197,7 @@ def evaluate(groundtruth_file,
     '--experiment-base-path',
     type=click.Path(writable=True, readable=True),
     help='Basepath where logs and checkpoints should be stored.',
-    default=join(FEATURE_PATH, 'experiments'),
+    default='.experiments',
 )
 @click.option(
     '-ru',
