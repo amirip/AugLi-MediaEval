@@ -4,6 +4,8 @@
 
 - [CNN Architectures for Large-Scale Audio Classification](ICASSP 2017)
 
+Adapted for MediaEval 2019 from [https://github.com/DTaoo/VGGish]
+
 """
 
 from __future__ import print_function

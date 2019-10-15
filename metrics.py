@@ -88,12 +88,12 @@ class ClassificationMetricCallback(tf.keras.callbacks.Callback):
         if type(y_val) == list:
             y_val = np.concatenate(y_val)
         
-        nans_in_validation = np.argwhere(np.isnan(y_val_unmasked))
+        nans_in_validation = np.argwhere(np.isnan(y_val))
         if nans_in_predictions.any() or nans_in_validation.any():
             print(nans_in_predictions, nans_in_validation,
                     len(nans_in_predictions), len(nans_in_validation))
 
-        logs = self.compute_metrics(y_val_unmasked,
+        logs = self.compute_metrics(y_val,
                                     y_pred,
                                     multi_label=self.multi_label,
                                     binary=self.binary,
@@ -102,7 +102,7 @@ class ClassificationMetricCallback(tf.keras.callbacks.Callback):
                                     prefix='',
                                     logs=logs)
         y_val_t, y_pred_t = ClassificationMetric._transform_arrays(
-            y_true=y_val_unmasked,
+            y_true=y_val,
             y_pred=y_pred,
             multi_label=self.multi_label,
             binary=self.binary)
@@ -211,7 +211,6 @@ class ClassificationMetric(Metric, ABC):
     average: ClassVar[str] = None
 
     @classmethod
-    @mask_metric
     @abstractmethod
     def compute(cls,
                 y_true: np.array,
@@ -273,7 +272,6 @@ class MicroRecall(ClassificationMetric):
     greater_is_better: ClassVar[bool] = True
 
     @classmethod
-    @mask_metric
     def compute(cls,
                 y_true: np.array,
                 y_pred: np.array,
@@ -313,7 +311,6 @@ class Accuracy(ClassificationMetric):
     greater_is_better: ClassVar[bool] = True
 
     @classmethod
-    @mask_metric
     def compute(cls,
                 y_true: np.array,
                 y_pred: np.array,
@@ -341,7 +338,6 @@ class MacroF1(ClassificationMetric):
     greater_is_better: ClassVar[bool] = True
 
     @classmethod
-    @mask_metric
     def compute(cls,
                 y_true: np.array,
                 y_pred: np.array,
@@ -383,7 +379,6 @@ class MacroPrecision(ClassificationMetric):
     greater_is_better: ClassVar[bool] = True
 
     @classmethod
-    @mask_metric
     def compute(cls,
                 y_true: np.array,
                 y_pred: np.array,
@@ -425,7 +420,6 @@ class ROC_AUC(ClassificationMetric):
     greater_is_better: ClassVar[bool] = True
 
     @classmethod
-    @mask_metric
     def compute(cls,
                 y_true: np.array,
                 y_pred: np.array,
@@ -449,7 +443,6 @@ class PR_AUC(ClassificationMetric):
     greater_is_better: ClassVar[bool] = True
 
     @classmethod
-    @mask_metric
     def compute(cls,
                 y_true: np.array,
                 y_pred: np.array,
@@ -475,11 +468,11 @@ CLASSIFICATION_METRICS = all_subclasses(ClassificationMetric)
 
 KERAS_METRIC_QUANTITIES = {
     M: f'val_{"_".join(M.key.lower().split(" "))}'
-    for M in ALL_METRICS
+    for M in CLASSIFICATION_METRICS
 }
 KERAS_METRIC_MODES = {
     M: 'max' if M.greater_is_better else 'min'
-    for M in ALL_METRICS
+    for M in CLASSIFICATION_METRICS
 }
 
-KEY_TO_METRIC = {metric.__name__: metric for metric in ALL_METRICS}
+KEY_TO_METRIC = {metric.__name__: metric for metric in CLASSIFICATION_METRICS}
