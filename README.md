@@ -71,25 +71,25 @@ python transform_features.py MEDIA-EVAL19/features/DeepSpectrum/1s/ MEDIA-EVAL19
 ### Training the RNN Models
 Next, train 3 RNN models for both featuresets:
 ```bash
-python train_rnn.py -ebp ./fusion/DeepSpectrum/1s/lstm -tr MEDIA-EVAL19/features/DeepSpectrum/1s/train.npz -v MEDIA-EVAL19/features/DeepSpectrum/1s/validation.npz -te MEDIA-EVAL19/features/DeepSpectrum/1s/test.npz -rt lstm
+python train_rnn.py -mep MEDIAEVAL19/ -ebp ./fusion/DeepSpectrum/1s/lstm -tr MEDIA-EVAL19/features/DeepSpectrum/1s/train.npz -v MEDIA-EVAL19/features/DeepSpectrum/1s/validation.npz -te MEDIA-EVAL19/features/DeepSpectrum/1s/test.npz -rt lstm
 
-python train_rnn.py -ebp ./fusion/DeepSpectrum/1s/bilstm -tr MEDIA-EVAL19/features/DeepSpectrum/1s/train.npz -v MEDIA-EVAL19/features/DeepSpectrum/1s/validation.npz -te MEDIA-EVAL19/features/DeepSpectrum/1s/test.npz -rt bilstm
+python train_rnn.py -mep MEDIAEVAL19/ -ebp ./fusion/DeepSpectrum/1s/bilstm -tr MEDIA-EVAL19/features/DeepSpectrum/1s/train.npz -v MEDIA-EVAL19/features/DeepSpectrum/1s/validation.npz -te MEDIA-EVAL19/features/DeepSpectrum/1s/test.npz -rt bilstm
 
-python train_rnn.py -ebp ./fusion/DeepSpectrum/1s/gru -tr MEDIA-EVAL19/features/DeepSpectrum/1s/train.npz -v MEDIA-EVAL19/features/DeepSpectrum/1s/validation.npz -te MEDIA-EVAL19/features/DeepSpectrum/1s/test.npz -rt gru
+python train_rnn.py -mep MEDIAEVAL19/ -ebp ./fusion/DeepSpectrum/1s/gru -tr MEDIA-EVAL19/features/DeepSpectrum/1s/train.npz -v MEDIA-EVAL19/features/DeepSpectrum/1s/validation.npz -te MEDIA-EVAL19/features/DeepSpectrum/1s/test.npz -rt gru
 
 
 
-python train_rnn.py -ebp ./fusion/DeepSpectrum/5s/lstm -tr MEDIA-EVAL19/features/DeepSpectrum/5s/train.npz -v MEDIA-EVAL19/features/DeepSpectrum/5s/validation.npz -te MEDIA-EVAL19/features/DeepSpectrum/5s/test.npz -rt lstm
+python train_rnn.py -mep MEDIAEVAL19/ -ebp ./fusion/DeepSpectrum/5s/lstm -tr MEDIA-EVAL19/features/DeepSpectrum/5s/train.npz -v MEDIA-EVAL19/features/DeepSpectrum/5s/validation.npz -te MEDIA-EVAL19/features/DeepSpectrum/5s/test.npz -rt lstm
 
-python train_rnn.py -ebp ./fusion/DeepSpectrum/5s/bilstm -tr MEDIA-EVAL19/features/DeepSpectrum/5s/train.npz -v MEDIA-EVAL19/features/DeepSpectrum/5s/validation.npz -te MEDIA-EVAL19/features/DeepSpectrum/5s/test.npz -rt bilstm
+python train_rnn.py -mep MEDIAEVAL19/ -ebp ./fusion/DeepSpectrum/5s/bilstm -tr MEDIA-EVAL19/features/DeepSpectrum/5s/train.npz -v MEDIA-EVAL19/features/DeepSpectrum/5s/validation.npz -te MEDIA-EVAL19/features/DeepSpectrum/5s/test.npz -rt bilstm
 
-python train_rnn.py -ebp ./fusion/DeepSpectrum/5s/gru -tr MEDIA-EVAL19/features/DeepSpectrum/5s/train.npz -v MEDIA-EVAL19/features/DeepSpectrum/5s/validation.npz -te MEDIA-EVAL19/features/DeepSpectrum/5s/test.npz -rt gru
+python train_rnn.py -mep MEDIAEVAL19/ -ebp ./fusion/DeepSpectrum/5s/gru -tr MEDIA-EVAL19/features/DeepSpectrum/5s/train.npz -v MEDIA-EVAL19/features/DeepSpectrum/5s/validation.npz -te MEDIA-EVAL19/features/DeepSpectrum/5s/test.npz -rt gru
 ```
 
 ## Fusion
 After training, test set predictions of every model should have been saved to the corresponding experiment paths ("./fusion/..."). For the late fusion described in the paper, prediction scores are averaged and the decisions and metrics are computed with the baseline code. You can also use the included `fusion.py` script:
 ```bash
-python fusion.py -mep MEDIA-EVAL19 -o fusion-results
+python fusion.py -mep MEDIA-EVAL19/ -o fusion-results
 ```
 The results are printed to the commandline and also stored in the folder `fusion-results`.
 

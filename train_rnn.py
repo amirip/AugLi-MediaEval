@@ -19,9 +19,6 @@ from sklearn import metrics
 
 RANDOM_SEED = 42
 
-FEATURE_PATH = './MEDIA-EVAL19/features/DeepSpectrum/vgg16/fc2/mel/magma/5-5/'
-MEDIA_EVAL_PATH = './MEDIA-EVAL19'
-
 OPTIMIZERS = {
     'rmsprop': keras.optimizers.RMSprop,
 }
@@ -133,6 +130,12 @@ def evaluate(groundtruth_file,
     return results
 
 @click.command(help='Train RNN on ds features for mediaeval.')
+@click.option('-mep',
+              '--media-eval-path',
+              required=True,
+              help='Path to media eval dataset. Should contain the "mtg-jamendo-dataset" folder.',
+              type=click.Path(file_okay=False),
+              default='./MEDIA-EVAL19')
 @click.option('-tr',
               '--train-npz',
               nargs=1,
@@ -220,7 +223,8 @@ def evaluate(groundtruth_file,
               type=click.Choice(('bilstm', 'lstm', 'gru')),
               help='Optimizer used for training.',
               default='gru')
-def train(train_npz=None,
+def train(media_eval_path='./MEDIA-EVAL19',
+          train_npz=None,
           val_npz=None,
           test_npz=None,
           experiment_base_path=None,
@@ -300,7 +304,7 @@ def train(train_npz=None,
     print(scores.shape, predicted_tags.shape)
     np.save(join(experiment_base_path, 'predictions.npy'), scores)
     np.save(join(experiment_base_path, 'decisions.npy'), predicted_tags)
-    evaluate(groundtruth_file=join(MEDIA_EVAL_PATH, 'mtg-jamendo-dataset',
+    evaluate(groundtruth_file=join(media_eval_path, 'mtg-jamendo-dataset',
                                    'results', 'mediaeval2019', 'groundtruth.npy'),
              prediction_file=join(experiment_base_path, 'predictions.npy'),
              decision_file=join(experiment_base_path, 'decisions.npy'),
