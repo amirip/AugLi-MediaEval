@@ -3,6 +3,15 @@ Code for Team AugLi's submission for the 2019 MediaEval Theme Recognition challe
 
 > S. Amiriparian, M. Gerczuk, E. Coutinho, A. Baird, S. Ottl, M. Milling, and B. Schuller. Emotion and Themes Recognition in Music Utilising Convolutional and Recurrent Neural Networks. In MediaEval Benchmarking Initiative for Multimedia Evaluation, Sophia Antipolis, France, 2019.
 
+Please direct any questions or requests to Shahin Amiriparian (amiriparian at ieee.org) or Maurice Gercuk (maurice.gerczuk at informatik.uni-augsburg.de).
+
+**(c) 2019 Shahin Amiriparian, Maurice Gerczuk, Björn Schuller: Universität Augsburg Published under GPLv3**
+
+## Description
+The presented system utilises the fusion of end-to-end convolutional recurrent neural networks (CRNN) and pre-trained convolutional feature extractors for music emotion and theme recognition.
+
+![Alt text](sys_diag.png?raw=true "Title")
+
 ## Dependencies
 - python >= 3.7
 - tensorflow
