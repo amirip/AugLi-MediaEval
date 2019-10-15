@@ -4,6 +4,7 @@ import click
 from sklearn import metrics
 from pathlib import Path
 from os.path import join
+from os import makedirs
 
 MEDIA_EVAL_PATH = './MEDIA-EVAL19'
 
@@ -90,7 +91,7 @@ def evaluate(groundtruth_file,
               default='MEDIA-EVAL19')
 @click.option(
     '-o',
-    '--output-directory',
+    '--output-dir',
     type=click.Path(writable=True, readable=True),
     help='Directory for storing fused predictions, decisions, thresholds and results.',
     default=None,
@@ -100,51 +101,102 @@ output_dir=None):
     groundtruth_file = join(media_eval_path, 'mtg-jamendo-dataset', 'results', 'mediaeval2019', 'groundtruth.npy')
     tag_file = join(media_eval_path, 'mtg-jamendo-dataset', 'data', 'tags', 'moodtheme_split.txt')
     tags = pd.read_csv(tag_file, delimiter='\t', header=None)[0].to_list()
-    
+    dec_out = None
+    threshold_out = None
+    predictions_out = None
+    eval_out = None
+
+    if output_dir is not None:
+        makedirs(output_dir, exist_ok=True)
     # all
+    print('Fusion of all systems:')
     glob = Path('./fusion').glob('**/predictions.npy')
     predictions = fuse(glob)
-    thresholds, decisions = calculate_decisions(groundtruth=np.load(groundtruth_file), predictions=predictions, tags=tags)
+    if output_dir is not None:
+        fused_dir = join(output_dir, 'crnn')
+        makedirs(fused_dir, exist_ok=True)
+        dec_out = join(fused_dir, 'decisions.npy')
+        threshold_out = join(fused_dir, 'thresholds.txt')
+        predictions_out = join(fused_dir, 'predictions.npy')
+        eval_out = join(fused_dir, 'eval-on-test.tsv')
+        np.save(predictions_out, predictions)
+    thresholds, decisions = calculate_decisions(groundtruth=np.load(groundtruth_file), predictions=predictions, tags=tags, threshold_file=threshold_out, decision_file=dec_out)
     evaluate(groundtruth_file=groundtruth_file,
              predictions=predictions,
              decisions=decisions,
-             output_file=None)
+             output_file=eval_out)
 
     # crnn
+    print('Fusion of all CRNN systems:')
     glob = Path('./fusion').glob('crnn/**/predictions.npy')
     predictions = fuse(glob)
-    thresholds, decisions = calculate_decisions(groundtruth=np.load(groundtruth_file), predictions=predictions, tags=tags)
+    if output_dir is not None:
+        fused_dir = join(output_dir, 'crnn')
+        makedirs(fused_dir, exist_ok=True)
+        dec_out = join(fused_dir, 'decisions.npy')
+        threshold_out = join(fused_dir, 'thresholds.txt')
+        predictions_out = join(fused_dir, 'predictions.npy')
+        eval_out = join(fused_dir, 'eval-on-test.tsv')
+        np.save(predictions_out, predictions)
+    thresholds, decisions = calculate_decisions(groundtruth=np.load(groundtruth_file), predictions=predictions, tags=tags, threshold_file=threshold_out, decision_file=dec_out)
     evaluate(groundtruth_file=groundtruth_file,
              predictions=predictions,
              decisions=decisions,
-             output_file=None)
+             output_file=eval_out)
 
     # DS
+    print('Fusion of all DS systems:')
     glob = Path('./fusion').glob('DeepSpectrum/**/predictions.npy')
     predictions = fuse(glob)
-    thresholds, decisions = calculate_decisions(groundtruth=np.load(groundtruth_file), predictions=predictions, tags=tags)
+    if output_dir is not None:
+        fused_dir = join(output_dir, 'ds')
+        makedirs(fused_dir, exist_ok=True)
+        dec_out = join(fused_dir, 'decisions.npy')
+        threshold_out = join(fused_dir, 'thresholds.txt')
+        predictions_out = join(fused_dir, 'predictions.npy')
+        eval_out = join(fused_dir, 'eval-on-test.tsv')
+        np.save(predictions_out, predictions)
+    thresholds, decisions = calculate_decisions(groundtruth=np.load(groundtruth_file), predictions=predictions, tags=tags, threshold_file=threshold_out, decision_file=dec_out)
     evaluate(groundtruth_file=groundtruth_file,
              predictions=predictions,
              decisions=decisions,
-             output_file=None)
+             output_file=eval_out)
 
-    # DS
+    # DS 1s
+    print('Fusion of all 1s DS systems:')
     glob = Path('./fusion').glob('DeepSpectrum/1s/**/predictions.npy')
     predictions = fuse(glob)
-    thresholds, decisions = calculate_decisions(groundtruth=np.load(groundtruth_file), predictions=predictions, tags=tags)
+    if output_dir is not None:
+        fused_dir = join(output_dir, 'ds-1s')
+        makedirs(fused_dir, exist_ok=True)
+        dec_out = join(fused_dir, 'decisions.npy')
+        threshold_out = join(fused_dir, 'thresholds.txt')
+        predictions_out = join(fused_dir, 'predictions.npy')
+        eval_out = join(fused_dir, 'eval-on-test.tsv')
+        np.save(predictions_out, predictions)
+    thresholds, decisions = calculate_decisions(groundtruth=np.load(groundtruth_file), predictions=predictions, tags=tags, threshold_file=threshold_out, decision_file=dec_out)
     evaluate(groundtruth_file=groundtruth_file,
              predictions=predictions,
              decisions=decisions,
-             output_file=None)
+             output_file=eval_out)
 
-    # DS
+    # DS 5s
+    print('Fusion of all 5s DS systems:')
     glob = Path('./fusion').glob('DeepSpectrum/5s/**/predictions.npy')
     predictions = fuse(glob)
-    thresholds, decisions = calculate_decisions(groundtruth=np.load(groundtruth_file), predictions=predictions, tags=tags)
+    if output_dir is not None:
+        fused_dir = join(output_dir, 'ds-5s')
+        makedirs(fused_dir, exist_ok=True)
+        dec_out = join(fused_dir, 'decisions.npy')
+        threshold_out = join(fused_dir, 'thresholds.txt')
+        predictions_out = join(fused_dir, 'predictions.npy')
+        eval_out = join(fused_dir, 'eval-on-test.tsv')
+        np.save(predictions_out, predictions)
+    thresholds, decisions = calculate_decisions(groundtruth=np.load(groundtruth_file), predictions=predictions, tags=tags, threshold_file=threshold_out, decision_file=dec_out)
     evaluate(groundtruth_file=groundtruth_file,
              predictions=predictions,
              decisions=decisions,
-             output_file=None)
+             output_file=eval_out)
 
 if __name__=='__main__':
     main()
