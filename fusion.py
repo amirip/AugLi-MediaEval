@@ -7,11 +7,11 @@ from os.path import join
 from os import makedirs
 
 MEDIA_EVAL_PATH = './MEDIA-EVAL19'
+FUSION_BASE_PATH = './fusion'
 
 
 def fuse(glob):
     predictions = np.array(list(map(np.load, glob)))
-    print(predictions.shape)
     mean_predictions = np.mean(predictions, axis=0)
     return mean_predictions
     
@@ -110,10 +110,10 @@ output_dir=None):
         makedirs(output_dir, exist_ok=True)
     # all
     print('Fusion of all systems:')
-    glob = Path('./fusion').glob('**/predictions.npy')
+    glob = Path(FUSION_BASE_PATH).glob('**/predictions.npy')
     predictions = fuse(glob)
     if output_dir is not None:
-        fused_dir = join(output_dir, 'crnn')
+        fused_dir = join(output_dir, 'all')
         makedirs(fused_dir, exist_ok=True)
         dec_out = join(fused_dir, 'decisions.npy')
         threshold_out = join(fused_dir, 'thresholds.txt')
@@ -128,7 +128,7 @@ output_dir=None):
 
     # crnn
     print('Fusion of all CRNN systems:')
-    glob = Path('./fusion').glob('crnn/**/predictions.npy')
+    glob = Path(FUSION_BASE_PATH).glob('crnn/**/predictions.npy')
     predictions = fuse(glob)
     if output_dir is not None:
         fused_dir = join(output_dir, 'crnn')
@@ -146,7 +146,7 @@ output_dir=None):
 
     # DS
     print('Fusion of all DS systems:')
-    glob = Path('./fusion').glob('DeepSpectrum/**/predictions.npy')
+    glob = Path(FUSION_BASE_PATH).glob('DeepSpectrum/**/predictions.npy')
     predictions = fuse(glob)
     if output_dir is not None:
         fused_dir = join(output_dir, 'ds')
@@ -164,7 +164,7 @@ output_dir=None):
 
     # DS 1s
     print('Fusion of all 1s DS systems:')
-    glob = Path('./fusion').glob('DeepSpectrum/1s/**/predictions.npy')
+    glob = Path(FUSION_BASE_PATH).glob('DeepSpectrum/1s/**/predictions.npy')
     predictions = fuse(glob)
     if output_dir is not None:
         fused_dir = join(output_dir, 'ds-1s')
@@ -182,7 +182,7 @@ output_dir=None):
 
     # DS 5s
     print('Fusion of all 5s DS systems:')
-    glob = Path('./fusion').glob('DeepSpectrum/5s/**/predictions.npy')
+    glob = Path(FUSION_BASE_PATH).glob('DeepSpectrum/5s/**/predictions.npy')
     predictions = fuse(glob)
     if output_dir is not None:
         fused_dir = join(output_dir, 'ds-5s')
