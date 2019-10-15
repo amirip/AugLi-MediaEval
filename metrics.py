@@ -8,8 +8,6 @@ from sklearn.metrics.scorer import _BaseScorer
 from statistics import pstdev, mean
 from typing import Dict, List, ClassVar, Set
 from math import sqrt
-from tqdm import tqdm
-
 
 def optimal_threshold(fpr, tpr, thresholds):
     optimal_idx = np.argmax(tpr - fpr)
