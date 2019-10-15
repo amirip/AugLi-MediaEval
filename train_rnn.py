@@ -142,21 +142,21 @@ def evaluate(groundtruth_file,
               required=True,
               help='Path to training npz file.',
               type=click.Path(exists=True, dir_okay=False, readable=True),
-              default=join(FEATURE_PATH, 'train.npz'))
+              default='train.npz')
 @click.option('-v',
               '--val-npz',
               required=True,
               help='Path to validation npz file.',
               nargs=1,
               type=click.Path(exists=True, dir_okay=False, readable=True),
-              default=join(FEATURE_PATH, 'validation.npz'))
+              default='validation.npz')
 @click.option('-te',
               '--test-npz',
               required=True,
               help='Path to test npz file.',
               nargs=1,
               type=click.Path(exists=True, dir_okay=False, readable=True),
-              default=join(FEATURE_PATH, 'test.npz'))
+              default='test.npz')
 @click.option(
     '-bs',
     '--batch-size',
