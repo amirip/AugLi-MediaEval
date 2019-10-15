@@ -457,7 +457,7 @@ def train(
         val_csv='./MEDIA-EVAL19/mtg-jamendo-dataset/data/splits/split-0/autotagging_moodtheme-validation.tsv',
         test_csv='./MEDIA-EVAL19/mtg-jamendo-dataset/data/splits/split-0/autotagging_moodtheme-test.tsv',
         experiment_base_path='./experiment',
-        epochs=20,
+        epochs=100,
         optimizer='rmsprop',
         learning_rate=0.001,
         n_workers=16,
@@ -554,7 +554,7 @@ def train(
             m.trainable = True
         for layer in vggish.layers:
             layer.trainable = True
-        m.compile(loss=loss,
+        m.compile(loss='binary_crossentropy',
                 metrics=[keras.metrics.categorical_accuracy],
                 optimizer=opt)
         m.summary()
