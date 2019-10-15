@@ -1,7 +1,7 @@
 # AugLi-MediaEval
 Code for Team AugLi's submission for the 2019 MediaEval Theme Recognition challenge.
 
-> S. Amiriparian, M. Gerczuk, E. Coutinho, A. Baird, S. Ottl, M. Milling, and B. Schuller. Emotion and Themes Recognition in Music Utilising Convolutional and Recurrent Neural Networks. In MediaEval 2019.
+> S. Amiriparian, M. Gerczuk, E. Coutinho, A. Baird, S. Ottl, M. Milling, and B. Schuller. Emotion and Themes Recognition in Music Utilising Convolutional and Recurrent Neural Networks. In MediaEval Benchmarking Initiative for Multimedia Evaluation, Sophia Antipolis, France, 2019.
 
 ## Dependencies
 - python >= 3.7
